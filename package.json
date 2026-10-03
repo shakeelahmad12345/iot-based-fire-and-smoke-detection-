@@ -1,0 +1,28 @@
+{
+  "name": "iot-fire-detection-dashboard",
+  "version": "1.0.0",
+  "description": "Local IoT fire and smoke monitoring dashboard powered by Blynk Cloud and Socket.IO",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "iot",
+    "esp32",
+    "blynk",
+    "fire-detection",
+    "dashboard"
+  ],
+  "author": "AI Assistant",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

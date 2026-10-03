@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IoT Fire Detection & Alarm System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-icon">🔥</div>
+          <div>
+            <h1>IoT FIRE DETECTION & ALARM SYSTEM</h1>
+            <p>ESP32-Based Real-Time Fire & Smoke Monitoring</p>
+          </div>
+        </div>
+
+        <div class="topbar-status">
+          <div class="connection-pill online" id="deviceStatusPill">
+            <span class="dot"></span>
+            <span>DEVICE ONLINE</span>
+          </div>
+          <div class="connection-pill warning" id="blynkStatusPill">
+            <span class="dot"></span>
+            <span>BLYNK CONNECTED</span>
+          </div>
+          <div class="last-update-box">
+            <span class="label">Last Update:</span>
+            <span id="lastUpdateDisplay">--:--:--</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="status-grid">
+          <article class="status-card fire-card" id="fireCard">
+            <div class="card-header">
+              <span class="card-icon">🔥</span>
+              <span>FIRE STATUS</span>
+            </div>
+            <div class="card-main">
+              <div class="state-label">Status</div>
+              <div class="state-value" id="fireState">NO FIRE</div>
+            </div>
+            <div class="meta-row">
+              <span>Datastream</span>
+              <strong>V0</strong>
+            </div>
+          </article>
+
+          <article class="status-card smoke-card" id="smokeCard">
+            <div class="card-header">
+              <span class="card-icon">💨</span>
+              <span>SMOKE STATUS</span>
+            </div>
+            <div class="card-main">
+              <div class="state-label">Status</div>
+              <div class="state-value" id="smokeState">NO SMOKE</div>
+            </div>
+            <div class="meta-row">
+              <span>Datastream</span>
+              <strong>V1</strong>
+            </div>
+          </article>
+
+          <article class="status-card alarm-card" id="alarmCard">
+            <div class="card-header">
+              <span class="card-icon">🚨</span>
+              <span>ALARM STATUS</span>
+            </div>
+            <div class="card-main">
+              <div class="state-label">Status</div>
+              <div class="state-value" id="alarmState">SYSTEM SAFE</div>
+            </div>
+            <div class="meta-row">
+              <span>Datastream</span>
+              <strong>V2</strong>
+            </div>
+          </article>
+
+          <article class="status-card buzzer-card" id="buzzerCard">
+            <div class="card-header">
+              <span class="card-icon">🔔</span>
+              <span>BUZZER STATUS</span>
+            </div>
+            <div class="card-main">
+              <div class="state-label">Status</div>
+              <div class="state-value" id="buzzerState">OFF</div>
+            </div>
+            <div class="meta-row">
+              <span>Datastream</span>
+              <strong>V3</strong>
+            </div>
+          </article>
+        </section>
+
+        <section class="sensor-grid">
+          <article class="sensor-card">
+            <div class="sensor-header">
+              <span class="sensor-icon">🔥</span>
+              <h3>FIRE SENSOR</h3>
+            </div>
+            <div class="sensor-value" id="fireRawValue">0</div>
+            <div class="sensor-caption">Raw Digital Value: 0 or 1</div>
+            <div class="sensor-detail">Meaning: 0 = No Fire, 1 = Fire Detected</div>
+            <div class="meta-row small">
+              <span>Datastream</span>
+              <strong>V4</strong>
+            </div>
+          </article>
+
+          <article class="sensor-card">
+            <div class="sensor-header">
+              <span class="sensor-icon">💨</span>
+              <h3>SMOKE SENSOR</h3>
+            </div>
+            <div class="sensor-value" id="smokeRawValue">1</div>
+            <div class="sensor-caption">Raw Digital Value: 0 or 1</div>
+            <div class="sensor-detail">Meaning: 1 = No Smoke, 0 = Smoke Detected</div>
+            <div class="meta-row small">
+              <span>Datastream</span>
+              <strong>V5</strong>
+            </div>
+          </article>
+        </section>
+
+        <section class="trend-panel">
+          <div class="panel-header">
+            <div>
+              <span class="panel-kicker">Live diagnostics</span>
+              <h2>Sensor Graphical Representation</h2>
+            </div>
+          </div>
+
+          <div class="trend-grid">
+            <article class="chart-card">
+              <div class="chart-header">
+                <span class="chart-icon">🔥</span>
+                <h3>Fire Trend</h3>
+              </div>
+              <div class="chart-value" id="fireTrendValue">0</div>
+              <svg id="fireTrendChart" class="trend-chart" viewBox="0 0 320 140" preserveAspectRatio="none"></svg>
+            </article>
+
+            <article class="chart-card">
+              <div class="chart-header">
+                <span class="chart-icon">💨</span>
+                <h3>Smoke Trend</h3>
+              </div>
+              <div class="chart-value" id="smokeTrendValue">0</div>
+              <svg id="smokeTrendChart" class="trend-chart" viewBox="0 0 320 140" preserveAspectRatio="none"></svg>
+            </article>
+
+            <article class="chart-card">
+              <div class="chart-header">
+                <span class="chart-icon">🚨</span>
+                <h3>Alarm Trend</h3>
+              </div>
+              <div class="chart-value" id="alarmTrendValue">0</div>
+              <svg id="alarmTrendChart" class="trend-chart" viewBox="0 0 320 140" preserveAspectRatio="none"></svg>
+            </article>
+
+            <article class="chart-card">
+              <div class="chart-header">
+                <span class="chart-icon">🔔</span>
+                <h3>Buzzer Trend</h3>
+              </div>
+              <div class="chart-value" id="buzzerTrendValue">0</div>
+              <svg id="buzzerTrendChart" class="trend-chart" viewBox="0 0 320 140" preserveAspectRatio="none"></svg>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="system-footer">
+        <div class="footer-row">
+          <div class="footer-item">
+            <span class="foot-label">ESP32 DEVICE</span>
+            <strong id="deviceStateText">ONLINE</strong>
+          </div>
+          <div class="footer-item">
+            <span class="foot-label">BLYNK CONNECTION</span>
+            <strong id="blynkStateText">CONNECTED</strong>
+          </div>
+          <div class="footer-item">
+            <span class="foot-label">LOCAL SERVER</span>
+            <strong>ONLINE</strong>
+          </div>
+          <div class="footer-item">
+            <span class="foot-label">LAST DATA UPDATE</span>
+            <strong id="lastDataUpdateText">--:--:--</strong>
+          </div>
+          <div class="footer-item">
+            <span class="foot-label">DATA REFRESH</span>
+            <strong>Live</strong>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
+  </body>
+</html>
